@@ -7,6 +7,8 @@ pipeline {
         KUBE_NAMESPACE = "petclinic"
         DEPLOYMENT_NAME = "petclinic"
         KUBE_MANIFEST = "k8/petclinic-deployment.yaml"
+        AWS_REGION = "us-west-2"
+        EKS_CLUSTER_NAME = "your-cluster-name"
     }
 
     stages {
@@ -18,10 +20,9 @@ pipeline {
 
         stage('Check Docker Version') {
             steps {
-                sh " docker version"
+                sh "docker version"
             }
         }
-
 
         stage('Build Java App') {
             steps {
@@ -31,7 +32,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh " docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+                sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
             }
         }
 
@@ -41,6 +42,16 @@ pipeline {
                     sh """
                         echo $PASSWORD | docker login -u $USERNAME --password-stdin
                         docker push ${IMAGE_NAME}:${IMAGE_TAG}
+                    """
+                }
+            }
+        }
+
+        stage('Authenticate to EKS') {
+            steps {
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-eks-creds']]) {
+                    sh """
+                        aws eks update-kubeconfig --region ${AWS_REGION} --name ${EKS_CLUSTER_NAME}
                     """
                 }
             }
