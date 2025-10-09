@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: petclinic
-        image: shakilahamed/spring-petclinic:latest
+        image: shakilahamed/ai-eks-petclinic-app:latest
         ports:
         - containerPort: 8080
         resources:
