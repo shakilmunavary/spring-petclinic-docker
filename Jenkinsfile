@@ -48,30 +48,8 @@ pipeline {
             }
         }
 
-        stage('Debug Environment') {
-            steps {
-                sh '''
-                    echo "🔍 Checking AWS and kubectl setup..."
-                    which aws
-                    aws sts get-caller-identity
-                    which kubectl
-                    kubectl version --client
-                    echo "✅ Environment looks good"
-                '''
-            }
-        }
 
-        stage('Prepare Kubeconfig') {
-            steps {
-                sh '''
-                    echo "📁 Ensuring kubeconfig directory exists..."
-                    mkdir -p /var/lib/jenkins/.kube
-                    chmod 700 /var/lib/jenkins/.kube
-                '''
-            }
-        }
-
-        stage('Authenticate to EKS') {
+        stage('Deploy to EKS') {
             steps {
                 withCredentials([
                     string(credentialsId: 'aws-access-key-id', variable: 'AWS_ACCESS_KEY_ID'),
@@ -82,40 +60,13 @@ pipeline {
                         export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
                         export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
                         aws eks update-kubeconfig --region ${AWS_REGION} --name ${EKS_CLUSTER_NAME} --kubeconfig ${KUBECONFIG_PATH}
+                        kubectl apply -f ${KUBE_MANIFEST} --validate=false
                         echo "✅ Kubeconfig updated"
                     '''
                 }
             }
         }
 
-        stage('Validate Kube Auth') {
-            steps {
-                sh '''
-                    echo "🔎 Validating Kubernetes access..."
-                    export KUBECONFIG=${KUBECONFIG_PATH}
-                    kubectl auth can-i list pods
-                    kubectl get nodes
-                    echo "✅ Kubernetes access verified"
-                '''
-            }
-        }
-
-        stage('Deploy to EKS') {
-            steps {
-                sh '''
-                    echo "🚀 Deploying PetClinic to EKS..."
-                    export KUBECONFIG=${KUBECONFIG_PATH}
-                    kubectl apply -f ${KUBE_MANIFEST} --validate=false
-                    echo "✅ Deployment applied"
-                '''
-            }
-        }
-
-        stage('Trigger AI Dashboard') {
-            steps {
-                sh "curl http://<your-dashboard-host>:5001/eks_dashboard/data?namespace=${KUBE_NAMESPACE}"
-            }
-        }
     }
 
     post {
