@@ -71,6 +71,8 @@ Or you can run it from Maven directly using the Spring Boot Maven plugin. If you
 
 - [Building PetClinic app using Dockerfile](https://docs.docker.com/language/java/build-images/)
 
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/98bc9e4b-1530-4f51-bd28-89271a18ed84" />
+
 
 
 Absolutely, Shakil — here’s a polished `README.md` tailored for your GitHub repo. It includes:
