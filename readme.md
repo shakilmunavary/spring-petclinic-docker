@@ -72,3 +72,140 @@ Or you can run it from Maven directly using the Spring Boot Maven plugin. If you
 - [Building PetClinic app using Dockerfile](https://docs.docker.com/language/java/build-images/)
 
 
+
+Absolutely, Shakil — here’s a polished `README.md` tailored for your GitHub repo. It includes:
+
+- ✅ Project overview
+- ✅ Architecture diagram (described in Markdown)
+- ✅ Setup instructions
+- ✅ Usage flow
+- ✅ Tech stack
+- ✅ Contribution and license sections
+
+---
+
+### ✅ `README.md`
+
+```markdown
+# 🧠 AI-Powered RCA Dashboard for Kubernetes Applications
+
+This project provides a full-stack, agentic RCA (Root Cause Analysis) dashboard that combines Kubernetes pod log monitoring, vector-based code retrieval, and Azure OpenAI-powered RCA synthesis. Designed for BFSI-grade observability, it enables real-time diagnostics with traceable source context.
+
+---
+
+## 📐 Architecture Overview
+
+```plaintext
+┌────────────────────────────┐
+│        User Browser        │
+│  (Accesses RCA Dashboard)  │
+└────────────┬───────────────┘
+             │
+             ▼
+┌────────────────────────────┐
+│         Flask App          │
+│  - Extracts pod logs       │
+│  - Retrieves code chunks   │
+│  - Synthesizes RCA         │
+└────────────┬───────────────┘
+             │
+             ▼
+┌────────────────────────────┐
+│     retrieve_chunks.py     │
+│  - Loads FAISS vector DB   │
+│  - Matches error context   │
+└────────────┬───────────────┘
+             │
+             ▼
+┌────────────────────────────┐
+│         FAISS DB           │
+│  - Indexed repo chunks     │
+│  - Azure embeddings        │
+└────────────┬───────────────┘
+             │
+             ▼
+┌────────────────────────────┐
+│        Azure OpenAI        │
+│  - GPT for RCA synthesis   │
+│  - Embedding API for FAISS │
+└────────────────────────────┘
+```
+
+---
+
+## 🚀 Features
+
+- ✅ Real-time RCA from Kubernetes pod logs
+- ✅ Code-aware diagnostics using FAISS vector search
+- ✅ Azure OpenAI-powered RCA agent
+- ✅ Source file traceability for every RCA
+- ✅ Modular shell scripts for reproducible setup
+
+---
+
+## 🛠️ Setup Instructions
+
+```bash
+# Clone the repo
+git clone https://github.com/your-org/ai-code.git
+cd ai-code
+
+# Configure environment
+cp .env.template .env
+# Fill in your Azure and Kubernetes credentials
+
+# Run the full pipeline
+./run.sh
+
+# Stop the dashboard
+./stop.sh
+```
+
+---
+
+## 🧪 Usage
+
+- Visit `http://localhost:5004/fd_eks/`
+- View recent error logs from your Kubernetes namespace
+- See RCA explanation with matching code chunks and source files
+- RCA is generated using Azure GPT and indexed repo context
+
+---
+
+## 🧰 Tech Stack
+
+- **Flask** — RCA dashboard backend
+- **LangChain + FAISS** — Vector search over codebase
+- **Azure OpenAI** — GPT + Embedding APIs
+- **Kubernetes Python Client** — Pod log extraction
+- **Shell Scripts** — Reproducible setup (`run.sh`, `stop.sh`)
+- **Spring Petclinic** — Sample repo for indexing
+
+---
+
+## 📁 Folder Structure
+
+```
+ai-code/
+├── app.py
+├── index.py
+├── retrieve_chunks.py
+├── run.sh
+├── stop.sh
+├── requirements.txt
+├── flask.log
+├── flask.pid
+├── vector_db/
+├── spring-petclinic-docker/
+├── venv2/
+└── .env.template
+```
+
+---
+
+## 🤝 Contributing
+
+Pull requests are welcome! For major changes, please open an issue first to discuss what you’d like to change.
+
+---
+
