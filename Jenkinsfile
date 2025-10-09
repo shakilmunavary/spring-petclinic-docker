@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "shakilahamed/spring-petclinic"
+        IMAGE_NAME = "shakilahamed/ai-eks-petclinic-app"
         IMAGE_TAG = "latest"
         KUBE_NAMESPACE = "petclinic"
         DEPLOYMENT_NAME = "petclinic"
@@ -15,7 +15,7 @@ pipeline {
     stages {
         stage('Checkout Source') {
             steps {
-                git url: 'https://github.com/shakilmunavary/spring-petclinic-docker.git', branch: 'main'
+                git url: 'https://github.com/shakilmunavary/ai-eks-petclinic-app.git', branch: 'main'
             }
         }
 
@@ -42,7 +42,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh '''
                         echo $PASSWORD | docker login -u $USERNAME --password-stdin
-                        docker push shakilahamed/spring-petclinic:latest
+                        docker push shakilahamed/ai-eks-petclinic-app:latest
                     '''
                 }
             }
